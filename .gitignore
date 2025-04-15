@@ -1,5 +1,22 @@
+# File di debug generati durante la compilazione
 *.dSYM
-*.o
-main
 
-build/
+# File oggetto
+*.o
+
+# Eseguibile generato
+negate
+
+# File di configurazione della build
+Makefile
+cmake_install.cmake
+CMakeCache.txt
+
+# Log e output della build
+CMakeOutput.log
+
+# Directory di build generata da CMake
+CMakeFiles/
+
+# File immagine usato per input/output nel progetto
+immagine.cr3
