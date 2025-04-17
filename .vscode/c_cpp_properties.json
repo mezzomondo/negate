@@ -1,15 +1,16 @@
 {
-    "configurations": [
-        {
-            "name": "Mac",
-            "includePath": [
-                "${workspaceFolder}/**"
-            ],
-            "defines": [],
-            "cStandard": "c17",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64"
-        }
-    ],
-    "version": 4
+  "configurations": [
+    {
+      "name": "Mac",
+      "includePath": [
+        "${workspaceFolder}/**",
+        "/usr/local/include" // Per includere librerie standard di GCC
+      ],
+      "compilerPath": "/usr/local/bin/g++-14", // Specifica il compilatore GCC
+      "cStandard": "c17",
+      "cppStandard": "c++23", // Usa lo standard C++23
+      "intelliSenseMode": "gcc-x64"
+    }
+  ],
+  "version": 4
 }
