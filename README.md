@@ -1,89 +1,93 @@
 # Negate
 
-Negate è uno strumento da linea di comando per elaborare file **CR3** (Canon RAW), generando negativi in scala di grigi o a colori e salvando il risultato come **PNG** ad alta qualità. L'applicazione permette di regolare luminosità, contrasto, gamma e altri parametri tramite opzioni dedicate.
+Negate è uno strumento da linea di comando per la generazione di negativi digitali da file **CR3** (Canon RAW), con salvataggio in **PNG** ad alta qualità. Permette la regolazione avanzata di luminosità, contrasto, gamma, livelli, colore e altri parametri, offrendo un flusso di lavoro flessibile per la post-produzione di negativi fotografici.
 
 ---
 
-## Funzionalità
+## Funzionalità principali
 
-- **Lettura file CR3** tramite ImageMagick (Magick++).
-- **Negazione** opzionale dell'immagine.
-- **Regolazione automatica** di luminosità e contrasto in base alle statistiche dell'immagine.
-- **Controllo parametri**: gamma, livello massimo, luminosità target, mantenimento colore.
+- **Supporto CR3** tramite ImageMagick/Magick++ (richiede supporto RAW).
+- **Negazione** opzionale dell’immagine.
+- **Regolazione automatica** di luminosità e contrasto in base alle statistiche dell’immagine.
+- **Controllo avanzato** di gamma, livelli, bilanciamento del bianco, saturazione, tinta, sharpening e altro.
 - **Output PNG** senza perdita di qualità.
-- **Interfaccia a riga di comando** con opzioni flessibili.
+- **Conversione in scala di grigi** opzionale.
+- **Interfaccia a riga di comando** con molte opzioni configurabili.
 
 ---
 
 ## Requisiti
 
 - **CMake** >= 3.10
-- **GCC/G++** (consigliato >= 14)
-- **ImageMagick** con supporto Magick++
-- (Opzionale) File CR3 di esempio per test
+- **GCC/G++** >= 14 consigliato
+- **ImageMagick** con supporto Magick++ e RAW (CR3)
+- (Facoltativo) File CR3 di esempio
 
 ---
 
 ## Installazione
 
-1. Clona il repository:
-   ```bash
-   git clone <URL_DEL_REPOSITORY>
-   cd negate
-   ```
-2. Configura il progetto:
-   ```bash
-   cmake .
-   ```
-3. Compila:
-   ```bash
-   make
-   ```
+```bash
+git clone <URL_DEL_REPOSITORY>
+cd negate
+cmake .
+make
+```
 
 ---
 
 ## Utilizzo
 
-Posiziona un file `.cr3` nella directory del progetto e lancia:
-
 ```bash
 ./negate [opzioni] [input.cr3] [output.png]
 ```
 
-### Opzioni principali
+Se non specificati, i file di input/output predefiniti sono `immagine.cr3` e `output_negativo.png`.
 
-- `-i=FILE`, `--input=FILE`   File di input (default: `immagine.cr3`)
-- `-o=FILE`, `--output=FILE`  File di output (default: `output_negativo.png`)
-- `-n`, `--negate`        Applica la negazione dell'immagine
-- `-t=VAL`, `--target=VAL`   Luminosità target (default: 0.45)
-- `-g=VAL`, `--gamma=VAL`   Valore gamma (default: 1.225)
-- `-l=VAL`, `--level-max=VAL` Valore massimo per level (default: 0.98)
-- `-k=VAL`, `--level-gamma=VAL` Gamma per level (default: 1.2)
-- `-c`, `--color`        Mantieni i colori (output non in scala di grigi)
-- `-h`, `--help`        Mostra l'aiuto
+### Opzioni disponibili
 
-Esempio:
+- `-i=FILE`, `--input=FILE`      File di input (default: `immagine.cr3`)
+- `-o=FILE`, `--output=FILE`     File di output (default: `output_negativo.png`)
+- `-n`, `--negate`           Applica la negazione dell’immagine
+- `-c`, `--color`           Mantieni i colori (output non in scala di grigi)
+- `-t=VAL`, `--target=VAL`     Luminosità target (default: 0.45)
+- `-g=VAL`, `--gamma=VAL`     Valore gamma (default: 1.225)
+- `-l=VAL`, `--level-max=VAL`   Valore massimo per level (default: 0.98)
+- `-k=VAL`, `--level-gamma=VAL`  Gamma per level (default: 1.2)
+- `--wb-red=VAL`          Bilanciamento bianco rosso (default: 1.05)
+- `--wb-green=VAL`        Bilanciamento bianco verde (default: 0.98)
+- `--wb-blue=VAL`         Bilanciamento bianco blu (default: 1.02)
+- `--sigmoidal-strength=VAL`   Forza sigmoidalContrast (default: 2.5)
+- `--sigmoidal-midpoint=VAL`   Punto medio sigmoidalContrast (default: 0.4)
+- `--saturation=VAL`       Saturazione per modulate (default: 115.0)
+- `--hue=VAL`           Tinta per modulate (default: 97.0)
+- `--evaluate-factor=VAL`    Fattore per evaluate (default: 0.2)
+- `--sharpen-sigma=VAL`     Sigma per adaptiveSharpen (default: 0.5)
+- `-h`, `--help`          Mostra l’aiuto
+
+### Esempio
 
 ```bash
-./negate -i=immagine.cr3 -o=negativo.png -n -g=1.3 -c
+./negate -i=immagine.cr3 -o=negativo.png -n -g=1.3 -c --wb-red=1.1 --saturation=120
 ```
 
 ---
 
 ## Output
 
-Il file PNG risultante sarà salvato con il nome specificato (default: `output_negativo.png`).
+Il file PNG risultante viene salvato con il nome specificato (default: `output_negativo.png`).  
+Il programma non modifica mai il file originale.
 
 ---
 
 ## Note
 
 - Il supporto ai file CR3 dipende dalla versione di ImageMagick installata.
-- Il programma non modifica i file originali.
+- Alcuni parametri avanzati sono pensati per utenti esperti di fotografia digitale e post-produzione.
 
 ---
 
 ## Crediti
 
-- **ImageMagick/Magick++**: Elaborazione immagini e supporto RAW
+- **ImageMagick/Magick++** per l’elaborazione immagini
 - Basato su idee e struttura CR3 da [Canon CR3](https://github.com/lclevy/canon_cr3)
