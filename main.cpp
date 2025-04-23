@@ -1,4 +1,4 @@
-// Inclusione delle librerie standard e di ImageMagick, ordinate alfabeticamente
+// Inclusione delle librerie standard e di ImageMagick
 #include <filesystem> // Per la gestione dei percorsi dei file
 #include <iostream>   // Per l'input/output su console
 #include <Magick++.h> // Per l'elaborazione delle immagini con ImageMagick
@@ -70,33 +70,6 @@ void showUsage(const char *programName)
               << "  --evaluate-factor=VAL        Fattore per evaluate (default: 0.2)\n"
               << "  --sharpen-sigma=VAL          Sigma per adaptiveSharpen (default: 0.5)\n"
               << "  -h, --help                   Mostra questo messaggio\n";
-}
-
-// Funzione per calcolare la media e la deviazione standard di un'immagine in scala di grigi
-std::pair<double, double> computeImageStatistics(const Image &inputImage, bool applyNegate)
-{
-    // Crea una copia dell'immagine in scala di grigi per evitare di modificare l'originale
-    Image grayImage = inputImage;
-    grayImage.colorSpace(GRAYColorspace);
-    debug("Creata copia in scala di grigi per le statistiche");
-
-    // Applica la negazione alla copia in scala di grigi, se richiesto
-    if (applyNegate)
-    {
-        grayImage.negate();
-        debug("Applicata negazione alla copia in scala di grigi");
-    }
-
-    // Calcola le statistiche dell'immagine in scala di grigi
-    ImageStatistics stats = grayImage.statistics();
-    ChannelStatistics grayStats = stats.channel(RedPixelChannel);
-
-    // Normalizza la media e la deviazione standard rispetto a QuantumRange
-    double grayMean = grayStats.mean() / QuantumRange;
-    double grayStd = grayStats.standardDeviation() / QuantumRange;
-
-    // Restituisce una coppia contenente media e deviazione standard
-    return {grayMean, grayStd};
 }
 
 // Funzione per il parsing degli argomenti da riga di comando
@@ -263,6 +236,33 @@ ProgramOptions parseArguments(int argc, char *argv[])
     debug("Sigma sharpen: ", options.sharpen_sigma);
 
     return options;
+}
+
+// Funzione per calcolare la media e la deviazione standard di un'immagine in scala di grigi
+std::pair<double, double> computeImageStatistics(const Image &inputImage, bool applyNegate)
+{
+    // Crea una copia dell'immagine in scala di grigi per evitare di modificare l'originale
+    Image grayImage = inputImage;
+    grayImage.colorSpace(GRAYColorspace);
+    debug("Creata copia in scala di grigi per le statistiche");
+
+    // Applica la negazione alla copia in scala di grigi, se richiesto
+    if (applyNegate)
+    {
+        grayImage.negate();
+        debug("Applicata negazione alla copia in scala di grigi");
+    }
+
+    // Calcola le statistiche dell'immagine in scala di grigi
+    ImageStatistics stats = grayImage.statistics();
+    ChannelStatistics grayStats = stats.channel(RedPixelChannel);
+
+    // Normalizza la media e la deviazione standard rispetto a QuantumRange
+    double grayMean = grayStats.mean() / QuantumRange;
+    double grayStd = grayStats.standardDeviation() / QuantumRange;
+
+    // Restituisce una coppia contenente media e deviazione standard
+    return {grayMean, grayStd};
 }
 
 // Funzione per calcolare il fattore di modulazione della luminosità
