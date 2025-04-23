@@ -18,5 +18,12 @@ CMakeOutput.log
 # Directory di build generata da CMake
 CMakeFiles/
 
-# File immagine usato per input/output nel progetto
-immagine.cr3
+# File immagine usati per input/output nel progetto
+*.cr3
+*.png
+*.tiff
+*.pp3
+
+.vscode/*
+
+.DS_Store
