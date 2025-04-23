@@ -1,23 +1,26 @@
-# Negate CR3 Image Project
+# Negate
 
-Un'applicazione per leggere file in bianco e nero **CR3** (Canon RAW), generare un negativo e salvarlo come **PNG** alla massima risoluzione.
-
----
-
-## Caratteristiche
-
-- **Lettura CR3**: Usa **LibRaw** per estrarre dati RAW.
-- **Generazione Negativo**: Trasformazione di immagini bianco e nero.
-- **Salvataggio PNG**: Utilizzo di **libpng** per qualità senza perdita.
+Negate è uno strumento da linea di comando per elaborare file **CR3** (Canon RAW), generando negativi in scala di grigi o a colori e salvando il risultato come **PNG** ad alta qualità. L'applicazione permette di regolare luminosità, contrasto, gamma e altri parametri tramite opzioni dedicate.
 
 ---
 
-## Prerequisiti
+## Funzionalità
+
+- **Lettura file CR3** tramite ImageMagick (Magick++).
+- **Negazione** opzionale dell'immagine.
+- **Regolazione automatica** di luminosità e contrasto in base alle statistiche dell'immagine.
+- **Controllo parametri**: gamma, livello massimo, luminosità target, mantenimento colore.
+- **Output PNG** senza perdita di qualità.
+- **Interfaccia a riga di comando** con opzioni flessibili.
+
+---
+
+## Requisiti
 
 - **CMake** >= 3.10
-- **GCC/G++**
-- **LibRaw**
-- **libpng**
+- **GCC/G++** (consigliato >= 14)
+- **ImageMagick** con supporto Magick++
+- (Opzionale) File CR3 di esempio per test
 
 ---
 
@@ -28,7 +31,7 @@ Un'applicazione per leggere file in bianco e nero **CR3** (Canon RAW), generare 
    git clone <URL_DEL_REPOSITORY>
    cd negate
    ```
-2. Configura con CMake:
+2. Configura il progetto:
    ```bash
    cmake .
    ```
@@ -37,27 +40,50 @@ Un'applicazione per leggere file in bianco e nero **CR3** (Canon RAW), generare 
    make
    ```
 
+---
+
 ## Utilizzo
 
-Posiziona un file CR3 nella directory del progetto e usa il comando:
+Posiziona un file `.cr3` nella directory del progetto e lancia:
 
 ```bash
-./negate immagine.cr3
+./negate [opzioni] [input.cr3] [output.png]
 ```
 
-Il file PNG risultante sarà `output_negativo.png`.
+### Opzioni principali
+
+- `-i=FILE`, `--input=FILE`   File di input (default: `immagine.cr3`)
+- `-o=FILE`, `--output=FILE`  File di output (default: `output_negativo.png`)
+- `-n`, `--negate`        Applica la negazione dell'immagine
+- `-t=VAL`, `--target=VAL`   Luminosità target (default: 0.45)
+- `-g=VAL`, `--gamma=VAL`   Valore gamma (default: 1.225)
+- `-l=VAL`, `--level-max=VAL` Valore massimo per level (default: 0.98)
+- `-k=VAL`, `--level-gamma=VAL` Gamma per level (default: 1.2)
+- `-c`, `--color`        Mantieni i colori (output non in scala di grigi)
+- `-h`, `--help`        Mostra l'aiuto
+
+Esempio:
+
+```bash
+./negate -i=immagine.cr3 -o=negativo.png -n -g=1.3 -c
+```
 
 ---
 
-## Prossimi sviluppi
+## Output
 
-- Conversione a **DNG**
-- Scrittura diretta di file CR3 (magari!)
+Il file PNG risultante sarà salvato con il nome specificato (default: `output_negativo.png`).
+
+---
+
+## Note
+
+- Il supporto ai file CR3 dipende dalla versione di ImageMagick installata.
+- Il programma non modifica i file originali.
 
 ---
 
 ## Crediti
 
-- **LibRaw**: Gestione file RAW
-- **libpng**: Salvataggio PNG
-- Struttura CR3 basata su [Canon CR3](https://github.com/lclevy/canon_cr3)
+- **ImageMagick/Magick++**: Elaborazione immagini e supporto RAW
+- Basato su idee e struttura CR3 da [Canon CR3](https://github.com/lclevy/canon_cr3)
